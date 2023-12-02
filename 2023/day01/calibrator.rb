@@ -1,6 +1,7 @@
 class Calibrator
   REGEXP = Regexp.new /\d|one|two|three|four|five|six|seven|eight|nine/
   REGEXP_LAST = Regexp.new /.*(\d|one|two|three|four|five|six|seven|eight|nine).*$/
+
   def initialize(input)
     @input = input
   end
