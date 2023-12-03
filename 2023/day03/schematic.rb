@@ -6,17 +6,7 @@ class Schematic
   def find_part_number
     @input.split("\n").each_with_index.sum do |line, index|
       line_sum = 0
-      part_nums = []
-
-      line.scan(/(\d+)/) do |num_match|
-        num = num_match.first.to_i
-        left = Regexp.last_match.begin(0)
-        right = Regexp.last_match.end(0) - 1
-
-        # Indexes have to be saved in a hashmap with each number to avoid
-        # the edge case of the same number occuring twice on one line.
-        part_nums << { num: num, left_index: left, right_index: right }
-      end
+      part_nums = extract_by_pattern_with_index(line, /(\d+)/)
 
       part_nums.each do |num|
         line_length = line.length
@@ -43,5 +33,51 @@ class Schematic
       end
       line_sum
     end
+  end
+
+  def find_gear_ratio
+    @input.split("\n").each_with_index.sum do |line, index|
+      line_sum = 0
+      possible_gears = extract_by_pattern_with_index(line, /(\*)/)
+      pns_above = extract_by_pattern_with_index(@input.split("\n")[index - 1], /(\d+)/)
+      pns_below = extract_by_pattern_with_index(@input.split("\n")[index + 1], /(\d+)/) unless index >= @input.split("\n").length - 1
+      pns_same_line = extract_by_pattern_with_index(line, /(\d+)/)
+
+      pns_in_context = []
+      pns_in_context.concat(pns_same_line)
+      pns_in_context += pns_below if pns_below # The lines above/below might not exist
+      pns_in_context += pns_above if pns_above
+
+      possible_gears.each do |gear|
+        gear_index = gear[:left_index]
+        adj_pns = []
+
+        pns_in_context.each do |pn|
+          if (pn[:left_index] - 1..pn[:right_index] + 1).include?(gear_index)
+            adj_pns << pn[:num]
+          end
+        end
+
+        line_sum += adj_pns.map(&:to_i).inject(:*) if adj_pns.length == 2
+      end
+      line_sum
+    end
+  end
+
+  private
+
+  def extract_by_pattern_with_index(line, pattern)
+    result = []
+
+    line.scan(pattern) do |num_match|
+      num = num_match.first
+      left = Regexp.last_match.begin(0)
+      right = Regexp.last_match.end(0) - 1
+
+      # Indexes have to be saved in a hashmap with each number to avoid
+      # the edge case of the same pattern occuring twice on one line.
+      result << { num: num, left_index: left, right_index: right }
+    end
+    result
   end
 end

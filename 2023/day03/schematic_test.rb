@@ -3,7 +3,7 @@ require_relative "schematic"
 
 class SchematicTest < Minitest::Test
   INPUT = <<-INPUT
-              467..114..
+            467..114..
             ...*......
             ..35..633.
             ......#...
@@ -16,5 +16,9 @@ class SchematicTest < Minitest::Test
             INPUT
   def test_find_part_number
     assert_equal 4361, Schematic.new(INPUT).find_part_number
+  end
+
+  def test_find_gear_ratio_sum
+    assert_equal 467835, Schematic.new(INPUT).find_gear_ratio
   end
 end
