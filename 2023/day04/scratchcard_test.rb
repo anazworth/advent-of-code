@@ -14,4 +14,8 @@ HEREDOC
   def test_total_points
     assert_equal 13, Scratchcard.new(INPUT).total_points
   end
+
+  def test_total_scratchcards
+    assert_equal 30, Scratchcard.new(INPUT).total_scratchcards
+  end
 end
