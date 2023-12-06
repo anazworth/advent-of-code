@@ -42,5 +42,8 @@ HEREDOC
     assert_equal 35, Mapper.new(INPUT).lowest_location
   end
 
+  def test_lowest_location_range
+    assert_equal 46, Mapper.new(INPUT).lowest_location_range
+  end
 end
 
