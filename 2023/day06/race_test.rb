@@ -11,6 +11,9 @@ HEREDOC
     assert_equal 288, Race.new(INPUT).margin_of_error
   end
 
+  def test_margin_of_error_single
+    assert_equal 71503, Race.new(INPUT).margin_of_error_single
+  end
 end
 
 
