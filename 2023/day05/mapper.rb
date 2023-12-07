@@ -39,7 +39,7 @@ class Mapper
     seeds = seeds.map { |range| (range[0]..(range[0] + range[1])) }
 
     found = false
-    ending_location = 72_000_000
+    ending_location = 0
 
     while !found
       current_location = ending_location
