@@ -37,39 +37,36 @@ class Mapper
     maps = input.split(/\n\s*\n/).map { |map| map.scan(/(\d+) (\d+) (\d+)/) }
 
     seeds = seeds.map { |range| (range[0]..(range[0] + range[1])) }
-    seeds = seeds.sort_by(&:first).inject([]) do |result, range|
-      if result.empty? || range.first > result.last.last
-        result << range
-      else
-        result.last.last = [result.last.last, range.last].max
-      end
-      result
-    end
 
+    found = false
+    ending_location = 72_000_000
 
-    seeds.each do |seed_range|
-      (seed_range).each do |seed|
-        break if !seed_range.include? seed
-        location = seed
-        p seeds.inspect
-        p "Range: #{seed_range}, Seed: #{seed}, Location: #{location}"
+    while !found
+      current_location = ending_location
+      printf("\rcurrent_location: #{current_location}")
+      maps.reverse.each do |map|
+        map.each do |line|
+          destination = line[0].to_i
+          source = line[1].to_i
+          range = line[2].to_i - 1
 
-        maps.each do |map|
-          map.each do |line|
-            destination = line[0].to_i
-            source = line[1].to_i
-            range = line[2].to_i - 1
-
-            if (source..(source + range)).include? location
-              location = location - source + destination
-              break # Don't continue the loop because the location value changed
-            end
+          if (destination..(destination + range)).include? current_location
+            current_location = current_location - destination + source
+            break # Don't continue the loop because the location value changed
           end
         end
-        lowest = [lowest, location].min unless lowest == nil
-        lowest = location if lowest == nil
       end
+      # see if the value of location is within any of the ranges within seeds
+      seeds.each do |seed_range|
+        if seed_range.include? current_location
+          p "found: #{ending_location} in #{seed_range}"
+          found = true
+          lowest = ending_location
+          break
+        end
+      end
+    ending_location += 1
     end
-    lowest
+    return lowest
   end
 end
