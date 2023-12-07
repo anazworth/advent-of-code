@@ -13,4 +13,8 @@ HEREDOC
   def test_total_winnings
     assert_equal 6440, Game.new(INPUT).total_winnings
   end
+
+  def test_total_winnings_with_joker
+    assert_equal 5905, Game.new(INPUT).total_winnings_with_joker
+  end
 end

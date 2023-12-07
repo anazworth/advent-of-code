@@ -6,3 +6,5 @@ game = Game.new input
 
 puts "Part 1: #{game.total_winnings}"
 
+puts "Part 2: #{game.total_winnings_with_joker}"
+
