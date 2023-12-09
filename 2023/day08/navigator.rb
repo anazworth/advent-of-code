@@ -6,24 +6,18 @@ class Navigator
   end
 
   def calculate_steps
-    steps, dir_index = 0, 0
-    current_node = @nodes["AAA"]
+    return follow_directions(@nodes["AAA"], "ZZZ")
+  end
 
-    loop do
-      steps += 1
-      current_direction = @directions[dir_index]
+  def calculate_steps_by_last
+    starting_nodes = @nodes.select { |key, _| key[2] == "A" }
 
-      return steps if current_node[:left] == "ZZZ" && current_direction == "L"
-      return steps if current_node[:right] == "ZZZ" && current_direction == "R"
-
-      current_node = @nodes[current_node[:left]] if current_direction == "L"
-      current_node = @nodes[current_node[:right]] if current_direction == "R"
-
-      dir_index += 1
-      dir_index = 0 if dir_index == @directions.length
+    results = starting_nodes.map do |key, _ |
+      ending_node = /..Z/
+      follow_directions(@nodes[key], ending_node)
     end
 
-    steps
+    results.reduce(1, :lcm)
   end
 
   private
@@ -36,5 +30,26 @@ class Navigator
       hash[line[0][0]] = { left: line[0][1], right: line[0][2] }
     end
     hash
+  end
+
+  def follow_directions(start_node, end_node_name)
+    steps, dir_index = 0, 0
+    current_node = start_node
+
+    loop do
+      current_direction = @directions[dir_index]
+
+      steps += 1
+      return steps if current_node[:left].match(end_node_name) && current_direction == "L"
+      return steps if current_node[:right].match(end_node_name) && current_direction == "R"
+
+      current_node = @nodes[current_node[:left]] if current_direction == "L"
+      current_node = @nodes[current_node[:right]] if current_direction == "R"
+
+      dir_index += 1
+      dir_index = 0 if dir_index == @directions.length
+    end
+
+    steps
   end
 end
