@@ -11,4 +11,8 @@ HEREDOC
   def test_sum_extrapolated_values
     assert_equal 114, Predictor.new(INPUT).sum_extrapolated_values
   end
+
+  def test_sum_extrapolated_reverse_values
+    assert_equal 2, Predictor.new(INPUT).sum_extrapolated_reverse_values
+  end
 end

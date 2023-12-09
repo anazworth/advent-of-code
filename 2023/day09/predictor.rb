@@ -4,14 +4,16 @@ class Predictor
   end
 
   def sum_extrapolated_values
-    @input.sum do |line|
-      extrapolate(line)
-    end
+    @input.sum { |line| extrapolate(line) }
+  end
+
+  def sum_extrapolated_reverse_values
+    @input.sum { |line| extrapolate_reverse(line) }
   end
 
   private
 
-  def extrapolate(line)
+  def generate_sequences(line)
     acc = []
     curr = line.split.map(&:to_i)
 
@@ -19,17 +21,29 @@ class Predictor
       acc << curr
       new = []
 
-
       curr.each_with_index do |n, i|
         new << curr[i + 1] - n unless curr[i + 1].nil?
       end
       curr = new
     end
+    acc
+  end
+
+  def extrapolate(line)
+    sequences = generate_sequences(line)
+    sequences.reverse.sum { |line| line[-1] }
+  end
+
+  def extrapolate_reverse(line)
+    sequences = generate_sequences(line)
 
     placeholders = []
-    acc.reverse.each do |line|
-      placeholders << line[-1]
+    curr_place = 0
+    sequences.reverse.each_with_index do |line|
+      place = line[0] - curr_place
+      placeholders << place
+      curr_place = place
     end
-    placeholders.sum
+    placeholders[-1]
   end
 end
