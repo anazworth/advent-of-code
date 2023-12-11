@@ -89,31 +89,7 @@ class Maze
       curr_pos = next_pos
     end
 
-
-    # Convert pipes to special characters
-    @input.each_with_index do |row, row_index|
-      row.each_with_index do |char, col_index|
-        in_loop = loop[[row_index, col_index]]
-        if in_loop
-          char = @input[row_index][col_index]
-          if char == "-"
-            @input[row_index][col_index] = "─"
-          elsif char == "|"
-            @input[row_index][col_index] = "│"
-          elsif char == "J"
-            @input[row_index][col_index] = "┘"
-          elsif char == "7"
-            @input[row_index][col_index] = "┐"
-          elsif char == "L"
-            @input[row_index][col_index] = "└"
-          elsif char == "F"
-            @input[row_index][col_index] = "┌"
-          end
-        end
-      end
-    end
-
-
+    # Jordan Curve Theorem
     contained = 0
     @input.each_with_index do |row, row_index|
       row.each_with_index do |char, col_index|
@@ -130,38 +106,30 @@ class Maze
 
             east_index += 1
 
-            if char_in_loop && char == "│"
+            if char_in_loop && char == "|"
               walls_hit += 1
-            elsif char_in_loop && char == "└"
+            elsif char_in_loop && char == "L"
               walls_hit += 1
-              last_corner = "└"
-            elsif char_in_loop && char == "┌"
+              last_corner = "L"
+            elsif char_in_loop && char == "F"
               walls_hit += 1
-              last_corner = "┌"
-            elsif char_in_loop && char == "┘"
-              if last_corner == "└"
+              last_corner = "F"
+            elsif char_in_loop && char == "J"
+              if last_corner == "L"
                 walls_hit -= 1
                 last_corner = nil
               end
-            elsif char_in_loop && char == "┐"
-              if last_corner == "┌"
+            elsif char_in_loop && char == "7"
+              if last_corner == "F"
                 walls_hit -= 1
                 last_corner = nil
               end
             end
           end
           contained += 1 if walls_hit.odd?
-
       end
     end
-    pp contained
-
-
-    # Save input to file
-    File.open("output.txt", "w") do |file|
-      file.write(@input.map(&:join).join("\n"))
-    end
-    return contained
+    contained
   end
 
   private
