@@ -123,55 +123,34 @@ class Maze
           sides = []
 
           walls_hit = 0
+          last_corner = nil
           until east_index >= @input[0].length
             char_in_loop = loop[[row_index, east_index]] || @input[row_index][east_index] == "S"
+            char = @input[row_index][east_index]
 
             east_index += 1
 
-            if char_in_loop
+            if char_in_loop && char == "│"
               walls_hit += 1
+            elsif char_in_loop && char == "└"
+              walls_hit += 1
+              last_corner = "└"
+            elsif char_in_loop && char == "┌"
+              walls_hit += 1
+              last_corner = "┌"
+            elsif char_in_loop && char == "┘"
+              if last_corner == "└"
+                walls_hit -= 1
+                last_corner = nil
+              end
+            elsif char_in_loop && char == "┐"
+              if last_corner == "┌"
+                walls_hit -= 1
+                last_corner = nil
+              end
             end
           end
-          sides << walls_hit
-
-          walls_hit = 0
-          west_index = col_index
-          until west_index < 0
-            char_in_loop = loop[[row_index, west_index]] || @input[row_index][west_index] == "S"
-            west_index -= 1
-            walls_hit += 1 if char_in_loop
-          end
-          sides << walls_hit
-
-          walls_hit = 0
-          north_index = row_index
-          until north_index < 0
-            char_in_loop = loop[[north_index, col_index]] || @input[north_index][col_index] == "S"
-            north_index -= 1
-            walls_hit += 1 if char_in_loop
-          end
-          sides << walls_hit
-
-          walls_hit = 0
-          south_index = row_index
-          until south_index >= @input.length
-            char_in_loop = loop[[south_index, col_index]] || @input[south_index][col_index] == "S"
-            south_index += 1
-            walls_hit += 1 if char_in_loop
-          end
-          sides << walls_hit
-
-          if sides.any? { |side| side == 0 }
-            @input[row_index][col_index] = " "
-          end
-
-
-
-          @input[row_index][col_index] = sides.any? { |side| side.odd? } ? "1" : "0"
-          if sides.any? { |side| side == 0 }
-            @input[row_index][col_index] = " "
-          end
-          contained += 1 if sides.any? { |side| side.odd? } && sides.all? { |side| side != 0 }
+          contained += 1 if walls_hit.odd?
 
       end
     end
