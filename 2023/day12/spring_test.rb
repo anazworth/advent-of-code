@@ -14,4 +14,8 @@ HEREDOC
   def test_sum_possible_arrangements
     assert_equal 21, Spring.new(INPUT).sum_possible_arrangements
   end
+
+  def test_sum_possible_arrangements_unfolded
+    assert_equal 525152, Spring.new(INPUT).sum_possible_arrangements_unfolded
+  end
 end

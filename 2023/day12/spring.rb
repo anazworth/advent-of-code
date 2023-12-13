@@ -10,11 +10,26 @@ class Spring
       exp = build_regexp(line[1])
       printf "\rWorking on... #{springs}"
 
-      sum_valid_permutaions(springs, exp)
+      sum_valid_permutations(springs, exp)
     end
     print "\r\nDone!\n"
     results
   end
+
+  def sum_possible_arrangements_unfolded
+    results = @input.sum do |line|
+      springs, sizes = line.split(" ")
+
+      sizes = sizes.split(",").map(&:to_i) * 5
+      springs = [[springs] * 5].flatten.join("?") + "."
+      springs = springs.gsub(/\.+/, ".")
+
+      sum_unfolded(springs, sizes)
+    end
+    print "\r\nDone!\n"
+    results
+  end
+
 
   private
 
@@ -38,7 +53,7 @@ class Spring
     arrangement.match?(exp)
   end
 
-  def sum_valid_permutaions(springs, exp)
+  def sum_valid_permutations(springs, exp)
     variable_indices = (0...springs.length).find_all { |i| springs[i] == "?" }
 
     combinations = ["#", "."].repeated_permutation(variable_indices.count).to_a
@@ -51,5 +66,42 @@ class Spring
       result
     end
     result_strings.uniq.sum { |arr| valid_arrangement?(arr, exp) ? 1 : 0 }
+  end
+
+  # Part 2
+  # https://www.youtube.com/watch?v=ZIWk05CqC4s
+  # Video/solution by CJ Avilla 
+  def sum_unfolded(springs, sizes, group_size = 0, cache = {})
+    key = [springs, sizes, group_size]
+
+    return cache[key] if cache[key]
+
+    if sizes.any? { |size| size - group_size > springs.length }
+      return cache[key] = 0
+    end
+
+    if sizes.empty?
+      return cache[key] = 1 if !springs.include?("#")
+      return cache[key] = 0
+    end
+
+    current, *rest = springs.chars
+
+    case [current]
+    in ['?']
+      return cache[key] = sum_unfolded('#' + rest.join, sizes, group_size, cache) + sum_unfolded("." + rest.join, sizes, group_size, cache)
+    in ['#']
+      return cache[key] = sum_unfolded(rest.join, sizes, group_size + 1, cache)
+    in ['.']
+      if group_size > 0
+        if group_size == sizes.first
+          return cache[key] = sum_unfolded(rest.join, sizes[1..], 0, cache)
+        else
+          return cache[key] = 0
+        end
+      else
+        return cache[key] = sum_unfolded(rest.join, sizes, 0, cache)
+      end
+    end
   end
 end
