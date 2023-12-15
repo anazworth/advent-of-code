@@ -5,35 +5,63 @@ class Mirror
 
   def reflection_summary
     @input.sum do |p|
-      pp pattern = p.split("\n")
-      pp [check_v(pattern), check_h(pattern)].sum
+      pattern = p.split("\n").map(&:chars)
+      [check_v(pattern), check_h(pattern)].max
     end
   end
+
+  def smudge_summary
+    @input.sum do |p|
+      pattern =  p.split("\n").map(&:chars)
+
+      actual_h = check_h(pattern)
+      actual_v = check_v(pattern)
+      possible_rows = Set.new
+      possible_cols = Set.new
+
+      pattern.each_with_index do |row, row_index|
+        row.each_with_index do |char, col_index|
+
+          temp = pattern.map(&:dup)
+          temp[row_index][col_index] = char == "#" ? "." : "#"
+
+          possible_rows << check_h(temp, actual_h)
+          possible_cols << check_v(temp, actual_v)
+        end
+      end
+      row = possible_rows - [actual_h]
+      col = possible_cols - [actual_v]
+      row.sum + col.sum
+    end
+  end
+
   
-  def check_v(pattern)
+  def check_v(pattern, original = 0)
     right = pattern[0].length - 1
     found_index = nil
     left = 0
 
     until !found_index.nil? || left == right
-      found_index = left if is_v_reflection?(pattern, left, left + 1)
+      found_index = left if is_v_reflection?(pattern, left, left + 1) && (left + 1) != original
       left += 1
     end
     return 0 if found_index == nil
     return found_index + 1
   end
 
-  def check_h(pattern)
+  def check_h(pattern, original = 0)
     bottom = pattern.length - 1
     found_index = nil
     top = 0
 
     until !found_index.nil? || top == bottom
-      found_index = top if is_h_reflection?(pattern, top, top + 1)
+      if is_h_reflection?(pattern, top, top + 1) && (top + 1) * 100 != original
+        found_index = top
+      end
       top += 1
     end
-    return 0 if found_index == nil
-    return (found_index + 1) * 100
+    return (top) * 100 if !found_index.nil?
+    return 0
   end
 
   def is_h_reflection?(pattern, t, b)
