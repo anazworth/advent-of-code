@@ -6,9 +6,44 @@ class Beam
     @seen_crossroads = Hash.new
   end
 
-  def energized_count
-    follow_beam(0, 0, :right, @input)
+  def energized_count(row = 0, col = 0, starting_dir = :right)
+    follow_beam(col, row, starting_dir, @input)
     @energized.count
+  end
+
+  def max_possible_energized
+    max = 0
+
+    # Check inward via left and right edges
+    @input.each_with_index do |row, index|
+      @energized = Set.new
+      @seen_crossroads = Hash.new
+      energized_count(index, 0)
+      left = @energized.count
+      max = [max, left].max
+
+      @energized = Set.new
+      @seen_crossroads = Hash.new
+      energized_count(index, row.length - 1, :left)
+      right = @energized.count
+      max = [max, right].max
+    end
+
+    # Check inward via top and bottom edges
+    (1..@input[0].length - 2).each do |index|
+      @energized = Set.new
+      @seen_crossroads = Hash.new
+      energized_count(0, index, :down)
+      top = @energized.count
+      max = [max, top].max
+
+      @energized = Set.new
+      @seen_crossroads = Hash.new
+      energized_count(@input.length - 1, index, :up)
+      bottom = @energized.count
+      max = [max, bottom].max
+    end
+    max
   end
 
   def follow_beam(x, y, dir, grid)
