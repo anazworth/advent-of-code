@@ -9,6 +9,10 @@ class LensTest < Minitest::Test
   def test_hash_sum
     assert_equal 1320, Lens.new(INPUT).hash_sum
   end
+
+  def test_focus_power_sum
+    assert_equal 145, Lens.new(INPUT).focus_power_sum
+  end
 end
 
 
