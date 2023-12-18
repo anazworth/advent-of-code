@@ -7,28 +7,55 @@ class Trench
   }
   def initialize(input)
     @input = input.split("\n")
-    @trench = Array.new(1000) { Array.new(1000, 0) }
   end
 
   def trench_area
-    curr_x, curr_y = 500, 500
-    @trench[curr_y][curr_x] = 1
+    curr_x, curr_y = 0, 0
 
     vertices = []
     perimeter = 0
 
-
     instructions = @input.map { |line| line.split(" ") }
-    instructions.each_with_index do |(dir, steps, _), i|
+    instructions.each do |(dir, steps, _)|
       steps.to_i.times do |step|
         perimeter += 1
         curr_x += DIRS[dir][0]
         curr_y += DIRS[dir][1]
-        @trench[curr_y][curr_x] = 1
       end
       vertices << [curr_x, curr_y]
     end
 
+    return shoelace(vertices) + perimeter / 2 + 1
+  end
+
+  def trench_hex_area
+    curr_x, curr_y = 0, 0
+
+    vertices = []
+    perimeter = 0
+
+    instructions = @input.map { |line| line.split(" ") }
+    instructions.each do |_, _, hex|
+      converted_hex = hex.scan(/#(.....)(.)/)
+      steps = Integer(converted_hex[0][0], 16)
+      dir = case converted_hex[0][1]
+            when "0"
+              "R"
+            when "1"
+              "D"
+            when "2"
+              "L"
+            when "3"
+              "U"
+            end
+
+      steps.times do |step|
+        curr_x += DIRS[dir][0]
+        curr_y += DIRS[dir][1]
+      end
+      perimeter += steps
+      vertices << [curr_x, curr_y]
+    end
     return shoelace(vertices) + perimeter / 2 + 1
   end
 

@@ -22,4 +22,8 @@ class TrenchTest < Minitest::Test
   def test_trench_area
     assert_equal 62, Trench.new(INPUT).trench_area
   end
+
+  def test_trench_hex_area
+    assert_equal 952408144115, Trench.new(INPUT).trench_hex_area
+  end
 end
