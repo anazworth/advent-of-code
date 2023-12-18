@@ -61,7 +61,6 @@ class Trench
     forward = 0
     backward = 0
 
-    vertices = vertices.reverse
     (0...n - 1).each do |i|
       forward += vertices[i][0] * vertices[i + 1][1]
     end
