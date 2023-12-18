@@ -5,6 +5,7 @@ class Trench
     "L" => [-1, 0],
     "U" => [0, -1]
   }
+
   def initialize(input)
     @input = input.split("\n")
   end
@@ -39,14 +40,10 @@ class Trench
       converted_hex = hex.scan(/#(.....)(.)/)
       steps = Integer(converted_hex[0][0], 16)
       dir = case converted_hex[0][1]
-            when "0"
-              "R"
-            when "1"
-              "D"
-            when "2"
-              "L"
-            when "3"
-              "U"
+            when "0" then "R"
+            when "1" then "D"
+            when "2" then "L"
+            when "3" then "U"
             end
 
       steps.times do |step|
