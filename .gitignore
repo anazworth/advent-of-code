@@ -1,3 +1,13 @@
+# AOC
+input.txt
+
+# Python
+*pycache*/
+.pytest_cache/
+
+.DS_Store
+
+
 *.gem
 *.rbc
 /.config
