@@ -1,4 +1,4 @@
-# Advent of Code: 2023
+# Advent of Code: 2023 (Ruby)
 
 _AI-free for 2023_
 
@@ -24,7 +24,7 @@ _AI-free for 2023_
 | [day18](2023/day18) | ⭐️⭐️️️ |
 | [day19](2023/day19) | ⭐️      |
 
-# Advent of Code: 2022
+# Advent of Code: 2022 (Python)
 
 | Day                 | Stars  |
 | ------------------- | ------ |
