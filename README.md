@@ -24,7 +24,7 @@ _AI-free for 2023_
 | [day18](2023/day18) | ⭐️⭐️️️ |
 | [day19](2023/day19) | ⭐️      |
 
-# Advent of Code: 2022 (Python)
+# Advent of Code: 2022 (Python/TypeScript)
 
 | Day                 | Stars  |
 | ------------------- | ------ |
@@ -34,3 +34,4 @@ _AI-free for 2023_
 | [day04](2022/day04) | ⭐️⭐️ |
 | [day05](2022/day05) | ⭐️⭐️ |
 | [day06](2022/day06) | ⭐️⭐️ |
+| [day08](2022/day08) | ⭐️⭐️ |
