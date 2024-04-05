@@ -36,8 +36,10 @@ _AI-free for 2023_
 | [day06](2022/day06) | ⭐️⭐️ |
 | [day08](2022/day08) | ⭐️⭐️ |
 
-# Advent of Code: 2021 (TypeScript)
+# Advent of Code: 2021
 
 | Day                 | Stars  |
 | ------------------- | ------ |
 | [day01](2022/day01) | ⭐️⭐️ |
+| [day02](2022/day02) | ⭐️    |
+| [day03](2022/day03) | ⭐️⭐️ |
