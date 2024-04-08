@@ -44,11 +44,9 @@ fn part_two(filename: &str) {
                 }
             }
             if is_winner(game.to_vec()) {
-                println!("Winner!");
-                println!("{:?}", game);
-                println!("{:?}", games_in_play);
                 games_hashmap.insert(i, true);
                 if games_in_play - games_hashmap.len() == 0 {
+                    println!("Winner!");
                     println!(
                         "RESULT: {}",
                         leftover_sum(game.to_vec()) * ball.parse::<i32>().unwrap()
