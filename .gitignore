@@ -1,6 +1,9 @@
 # AOC
 input.txt
 
+# Rust
+target/
+
 # Python
 *pycache*/
 .pytest_cache/
